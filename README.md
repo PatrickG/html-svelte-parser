@@ -128,8 +128,8 @@ You can directly modify the DOM nodes or remove them by returning `false`:
 		<p id="keep">keep me</p>
 	`;
 
-	/** @type {import('html-svelte-parser').Processor} */
-	const processNode: Processor = domNode => {
+	/** @type {import('html-svelte-parser').ProcessNode} */
+	const processNode = domNode => {
 		if (isTag(domNode)) {
 			if (domNode.attribs.id === 'remove') {
 				return false;
@@ -172,7 +172,7 @@ _App.svelte_
 
 	const html = `<p id="replace">text</p>`;
 
-	/** @type {import('html-svelte-parser').Processor} */
+	/** @type {import('html-svelte-parser').ProcessNode} */
 	const processNode = domNode => {
 		if (isTag(domNode) && domNode.attribs.id === 'replace') {
 			domNode.children = [new Text('replaced')];
@@ -384,7 +384,7 @@ _App.svelte_
 			node.children.find(child => isTag(child) && hasClass(child, className))
 		);
 
-	/** @type {import('$lib').ProcessNode} */
+	/** @type {import('html-svelte-parser').ProcessNode} */
 	const processNode = node => {
 		if (!isTag(node)) return;
 
