@@ -1,7 +1,7 @@
 {
   "name": "html-svelte-parser",
   "description": "HTML to Svelte parser.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "AGPL-3.0-only",
   "author": {
     "name": "Patrick Günther",
@@ -22,7 +22,7 @@
   ],
   "scripts": {
     "dev": "vite dev",
-    "build": "svelte-kit sync && svelte-package",
+    "build": "svelte-kit sync && svelte-package -o package",
     "build:web": "vite build",
     "prepublishOnly": "echo 'Did you mean to publish `./package/`, instead of `./`?' && exit 1",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -36,7 +36,7 @@
     "@playwright/test": "^1.27.1",
     "@sveltejs/adapter-static": "^1.0.0-next.48",
     "@sveltejs/kit": "next",
-    "@sveltejs/package": "next",
+    "@sveltejs/package": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "eslint": "^8.16.0",
@@ -58,5 +58,60 @@
     "domhandler": "^5.0.3",
     "html-dom-parser": "^3.1.2",
     "htmlparser2": "^8.0.1"
+  },
+  "exports": {
+    "./Html.svelte": {
+      "types": "./package/Html.svelte.d.ts",
+      "svelte": "./package/Html.svelte",
+      "default": "./package/Html.svelte"
+    },
+    "./Renderer.svelte": {
+      "types": "./package/Renderer.svelte.d.ts",
+      "svelte": "./package/Renderer.svelte",
+      "default": "./package/Renderer.svelte"
+    },
+    ".": {
+      "types": "./package/index.d.ts",
+      "svelte": "./package/index.js",
+      "default": "./package/index.js"
+    },
+    "./load": {
+      "types": "./package/load.d.ts",
+      "default": "./package/load.js"
+    },
+    "./parse": {
+      "types": "./package/parse.d.ts",
+      "default": "./package/parse.js"
+    },
+    "./types": {
+      "types": "./package/types.d.ts",
+      "default": "./package/types.js"
+    }
+  },
+  "files": [
+    "package"
+  ],
+  "svelte": "./package/index.js",
+  "typesVersions": {
+    ">4.0": {
+      "Html.svelte": [
+        "./package/Html.svelte.d.ts"
+      ],
+      "Renderer.svelte": [
+        "./package/Renderer.svelte.d.ts"
+      ],
+      "index.d.ts": [
+        "./package/index.d.ts"
+      ],
+      "load": [
+        "./package/load.d.ts"
+      ],
+      "parse": [
+        "./package/parse.d.ts"
+      ],
+      "types": [
+        "./package/types.d.ts"
+      ]
+    }
   }
 }
