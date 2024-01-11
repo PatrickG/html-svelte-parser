@@ -1,8 +1,8 @@
 import type { DomSerializerOptions } from 'dom-serializer';
 import type {
 	DomHandlerOptions,
-	Element,
 	Node as DomNode,
+	Element,
 	Text,
 } from 'domhandler';
 import type { ParserOptions } from 'htmlparser2';
@@ -82,7 +82,7 @@ export type ProcessNode<
 
 export type Options<C extends ComponentType | string = ComponentType | string> =
 	ParserOptions &
-		DomHandlerOptions &
+		Omit<DomHandlerOptions, 'withStartIndices' | 'withEndIndices'> &
 		DomSerializerOptions & {
 			/**
 			 * Modify, remove or replace a node.
@@ -91,21 +91,36 @@ export type Options<C extends ComponentType | string = ComponentType | string> =
 
 			/**
 			 * Remove element nodes with the specified names.
+			 *
+			 * @default []
 			 */
 			filterTags?: string[];
 
 			/**
 			 * Remove element attributes with the specified names.
+			 *
+			 * @default []
 			 */
 			filterAttributes?: string[];
 
 			/**
 			 * Remove element attributes that start with `on:`.
+			 *
+			 * @default false
 			 */
 			filterEventAttributes?: boolean;
 
 			/**
 			 * Do not render children with sveltes `@html`.
+			 *
+			 * @default false
 			 */
 			noHtmlNodes?: boolean;
+
+			/**
+			 * If set to true, all attribute names will be lowercased. This has noticeable impact on speed.
+			 *
+			 * @default false
+			 */
+			lowerCaseAttributeNames?: boolean;
 		};

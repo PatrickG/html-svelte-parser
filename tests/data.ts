@@ -8,6 +8,7 @@ export const html = {
 	complex:
 		'<html><head><meta charSet="utf-8"/><title>Title</title><link rel="stylesheet" href="style.css"/></head><body><header id="header">Header</header><h1 style="color:#000;font-size:42px">Heading</h1><hr/><p>Paragraph</p><img src="image.jpg"/><div class="class1 class2">Some <em>text</em>.</div><script>alert();</script></body></html>',
 	textarea: '<textarea><p>foo</p><p>bar</p></textarea>',
+	textareaWithInvalidHtml: '<textarea><p><p>foo</p></p></textarea>',
 	script: '<script>alert(1 < 2);</script>',
 	style: '<style>body > .foo { color: #f00; }</style>',
 	img: '<img src="http://stat.ic/img.jpg" alt="Image"/>',

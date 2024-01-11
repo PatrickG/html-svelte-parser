@@ -1,7 +1,6 @@
-import { isTag, isText, parse, type Props } from '$lib';
-import type { PageServerLoad } from './$types';
+import { isTag, isText, parse, type Props } from '$lib/index.js';
 
-export const load: PageServerLoad = () => {
+export function load() {
 	const html = `<h1>Welcome to your library project</h1>
 	<div><textarea><p>Test</p></textarea></div>
 <p onclick="alert('test')">Create your package using @sveltejs/package and preview/showcase your work with SvelteKit</p>
@@ -31,5 +30,9 @@ export const load: PageServerLoad = () => {
 				}
 			},
 		}),
+
+		textareaTest: parse('<textarea><p><p>test</p></textarea>', {
+			// noHtmlNodes: true,
+		}),
 	};
-};
+}

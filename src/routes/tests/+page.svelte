@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { Renderer } from '$lib';
-	import type { PageData } from './$types';
+	import { Renderer } from '$lib/index.js';
 
-	export let data: PageData;
+	export let data;
 </script>
 
 <div id="with-html-nodes"><Renderer {...data.withHtmlNodes} /></div>

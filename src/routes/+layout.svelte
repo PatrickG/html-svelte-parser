@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import GithubCorner from 'svelte-github-corner';
+	import GithubCorner from './GithubCorner.svelte';
 </script>
 
 <GithubCorner href="https://github.com/PatrickG/html-svelte-parser" />

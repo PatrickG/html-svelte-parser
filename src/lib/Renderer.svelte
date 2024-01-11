@@ -4,9 +4,9 @@
 
 	import type { ComponentType } from 'svelte';
 	import SvgRenderer from './SvgRenderer.svelte';
-	import type { Node, Props } from './types';
-	import { NodeType } from './types';
-	import { getComponent, getComponentProps } from './utils';
+	import type { Node, Props } from './types.js';
+	import { NodeType } from './types.js';
+	import { getComponent, getComponentProps } from './utils.js';
 
 	/** Nodes returned from `parse`. */
 	export let nodes: Node[];

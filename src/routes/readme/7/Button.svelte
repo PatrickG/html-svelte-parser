@@ -1,9 +1,8 @@
-<script>
-	/** @type {string | undefined} */
-	export let href = undefined;
+<script lang="ts">
+	import type { HTMLButtonAttributes } from 'svelte/elements';
 
-	/** @type {'button' | 'submit' | 'reset'}*/
-	export let type = 'button';
+	export let href: string | undefined = undefined;
+	export let type: HTMLButtonAttributes['type'] = 'button';
 </script>
 
 {#if href}

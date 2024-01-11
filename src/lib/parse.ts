@@ -1,22 +1,26 @@
 import { render } from 'dom-serializer';
 import {
+	Text,
 	isTag,
 	isText,
-	Text,
 	type ChildNode,
-	type Element,
+	type DomHandlerOptions,
 	type Node as DomNode,
+	type Element,
 } from 'domhandler';
+import { BROWSER } from 'esm-env';
 import htmlToDom from 'html-dom-parser';
 import type { ComponentType } from 'svelte';
-import type {
-	ComponentNode,
-	Node,
-	Options,
-	ProcessNode,
-	TagNode,
-} from './types';
-import { NodeType } from './types.js';
+import {
+	NodeType,
+	type ComponentNode,
+	type Node,
+	type Options,
+	type ProcessNode,
+	type TagNode,
+} from './types.js';
+
+const TEXTAREA_REGEX = /^<[^>]+>(.+)<\/[^<]+>$/;
 
 const defaultOptions: Omit<Options, 'processNode'> = {
 	lowerCaseAttributeNames: false,
@@ -26,8 +30,13 @@ export const parse = <C extends ComponentType | string = string>(
 	html: string,
 	options: Options<C> = {},
 ) => {
-	options = { ...defaultOptions, ...options };
-	const { components, nodes } = transform<C>(htmlToDom(html, options), options);
+	const opts: Options<C> & DomHandlerOptions = {
+		...defaultOptions,
+		...options,
+		withStartIndices: true,
+		withEndIndices: true,
+	};
+	const { components, nodes } = transform<C>(html, htmlToDom(html, opts), opts);
 	return {
 		nodes,
 		components: Array.from(components),
@@ -43,6 +52,7 @@ const removeNode = (node: DomNode) => {
 };
 
 const transform = <C extends ComponentType | string = ComponentType | string>(
+	html: string,
 	domNodes: DomNode[],
 	options: Options<C>,
 ) => {
@@ -58,13 +68,16 @@ const transform = <C extends ComponentType | string = ComponentType | string>(
 			// fix textarea content on the server as good as possible
 			// @see https://github.com/fb55/htmlparser2/issues/51
 			if (
-				typeof window === 'undefined' &&
+				!BROWSER &&
 				domNode.name === 'textarea' &&
-				domNode.children?.length
+				domNode.children?.length &&
+				domNode.startIndex !== null &&
+				domNode.endIndex !== null
 			) {
-				domNode.children = [
-					new Text(render(domNode.children, { encodeEntities: true })),
-				];
+				const match = html
+					.slice(domNode.startIndex, domNode.endIndex + 1)
+					.match(TEXTAREA_REGEX);
+				if (match) domNode.children = [new Text(match[1])];
 			}
 
 			// Filter `node.attribs` before processing node
@@ -101,6 +114,7 @@ const transform = <C extends ComponentType | string = ComponentType | string>(
 						: [childNodes];
 
 					const { nodes, components: childComponents } = transform<C>(
+						html,
 						childDomNodes,
 						options,
 					);
@@ -125,7 +139,7 @@ const transform = <C extends ComponentType | string = ComponentType | string>(
 				isTag(domNode) &&
 				domNode.children?.length
 			) {
-				transformAndAddChildren(node, domNode, components, options);
+				transformAndAddChildren(html, node, domNode, components, options);
 			}
 
 			nodes.push(node);
@@ -163,6 +177,7 @@ const transform = <C extends ComponentType | string = ComponentType | string>(
 			let hasChildComponents;
 			if (domNode.children?.length) {
 				hasChildComponents = transformAndAddChildren(
+					html,
 					node,
 					domNode,
 					components,
@@ -185,12 +200,14 @@ const transform = <C extends ComponentType | string = ComponentType | string>(
 };
 
 const transformAndAddChildren = (
+	html: string,
 	node: TagNode | ComponentNode,
 	domNode: Element,
 	components: Set<ComponentType | string>,
 	options: Options,
 ) => {
 	const { nodes: childNodes, components: childComponents } = transform(
+		html,
 		domNode.children,
 		options,
 	);

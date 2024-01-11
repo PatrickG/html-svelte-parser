@@ -3,9 +3,9 @@
 	// Wrap `HtmlNode`s with an extra `g` (see https://github.com/sveltejs/svelte/issues/5764#issuecomment-753292326)
 
 	import type { ComponentType } from 'svelte';
-	import type { Node, Props } from './types';
-	import { NodeType } from './types';
-	import { getComponent, getComponentProps } from './utils';
+	import type { Node, Props } from './types.js';
+	import { NodeType } from './types.js';
+	import { getComponent, getComponentProps } from './utils.js';
 
 	export let nodes: Node[];
 	export let components: Record<string, ComponentType> = {};

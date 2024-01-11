@@ -1,24 +1,18 @@
 import adapter from '@sveltejs/adapter-static';
-import preprocess from 'svelte-preprocess';
-
-const dev = true || process.argv.includes('dev');
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	// Consult https://github.com/sveltejs/svelte-preprocess
-	// for more information about preprocessors
-	preprocess: preprocess(),
+	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter({ strict: false }),
-		paths: { base: dev ? '' : '/html-svelte-parser' },
-	},
-
-	vitePlugin: {
-		experimental: {
-			inspector: true,
+		adapter: adapter({ fallback: '404.html' }),
+		paths: {
+			base: /** @type {`/${string}` | undefined} */ (process.env.BASE_PATH),
 		},
 	},
+
+	vitePlugin: { inspector: true },
 };
 
 export default config;

@@ -1,5 +1,5 @@
-<script>
-	import { Html } from '$lib';
+<script lang="ts">
+	import { Html } from '$lib/index.js';
 </script>
 
 <Html

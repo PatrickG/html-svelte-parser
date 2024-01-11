@@ -1,5 +1,5 @@
 import type { ComponentType } from 'svelte';
-import type { ComponentNode, Props } from './types';
+import type { ComponentNode, Props } from './types.js';
 
 export const getComponent = (
 	node: ComponentNode,

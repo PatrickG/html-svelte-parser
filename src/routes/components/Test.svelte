@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Attributes } from '$lib';
+	import type { Attributes } from '$lib/types.js';
 
 	export let attributes: Attributes;
 	export let a: string;

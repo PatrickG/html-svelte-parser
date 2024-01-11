@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { ProcessNode } from '$lib';
-	import { Html, isTag } from '$lib';
+	import { Html, isTag } from '$lib/index.js';
+	import type { ProcessNode } from '$lib/types.js';
 	import Test from './components/Test.svelte';
 
 	let html = `<h1>Welcome to your library project</h1>

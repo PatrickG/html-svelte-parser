@@ -1,13 +1,12 @@
-<script>
-	import { Html, isTag, Text } from '$lib';
+<script lang="ts">
+	import { Html, Text, isTag, type ProcessNode } from '$lib/index.js';
 
 	const html = `
 		<p id="remove">remove me</p>
 		<p id="keep">keep me</p>
 	`;
 
-	/** @type {import('$lib').ProcessNode} */
-	const processNode = domNode => {
+	const processNode: ProcessNode = domNode => {
 		if (isTag(domNode)) {
 			if (domNode.attribs.id === 'remove') {
 				return false;

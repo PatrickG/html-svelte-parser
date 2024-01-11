@@ -1,15 +1,10 @@
-<script>
-	import { Renderer } from '$lib';
+<script lang="ts">
+	import { Renderer, type RendererProps } from '$lib/index.js';
 	import Card from './Card.svelte';
 
-	/** @type {import('$lib').RendererProps} */
-	export let title;
-
-	/** @type {import('$lib').RendererProps} */
-	export let content;
-
-	/** @type {import('$lib').RendererProps} */
-	export let actions;
+	export let title: RendererProps;
+	export let content: RendererProps;
+	export let actions: RendererProps;
 </script>
 
 <Card>

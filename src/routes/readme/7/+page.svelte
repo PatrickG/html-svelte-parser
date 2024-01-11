@@ -1,5 +1,11 @@
-<script>
-	import { Html, isTag } from '$lib';
+<script lang="ts">
+	import {
+		Html,
+		isTag,
+		type Element,
+		type ParentNode,
+		type ProcessNode,
+	} from '$lib/index.js';
 	import Button from './Button.svelte';
 	import CardWrapper from './CardWrapper.svelte';
 
@@ -13,28 +19,22 @@
 			</div>
 
 			<div class="card--actions">
-				<a class="btn" href="/whatever">Call to action</a>
+				<a class="btn" href="/readme">Call to action</a>
 			</div>
 		</div>
 	`;
 
 	// lets define some helpers
 
-	const hasClass = (
-		/** @type {import('domhandler').Element} */ node,
-		/** @type {string} */ className,
-	) => node.attribs.class?.split(/\s/).includes(className);
+	const hasClass = (node: Element, className: string) =>
+		node.attribs.class?.split(/\s/).includes(className);
 
-	const findChildWithClass = (
-		/** @type {import('domhandler').ParentNode} */ node,
-		/** @type {string} */ className,
-	) =>
-		/** @type {import('domhandler').Element | undefined} */ (
-			node.children.find(child => isTag(child) && hasClass(child, className))
+	const findChildWithClass = (node: ParentNode, className: string) =>
+		node.children.find(
+			(child): child is Element => isTag(child) && hasClass(child, className),
 		);
 
-	/** @type {import('$lib').ProcessNode} */
-	const processNode = node => {
+	const processNode: ProcessNode = node => {
 		if (!isTag(node)) return;
 
 		// add attributes to external links

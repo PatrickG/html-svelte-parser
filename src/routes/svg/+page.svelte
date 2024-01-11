@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Html, isTag } from '$lib';
+	import { Html, isTag } from '$lib/index.js';
 	import Group from './Group.svelte';
 	import Rect from './Rect.svelte';
 

@@ -1,7 +1,6 @@
-import { isTag, parse } from '$lib';
+import { isTag, parse } from '$lib/index.js';
 
-/** @type {import('./$types').PageServerLoad} */
-export const load = () => {
+export function load() {
 	return {
 		content: parse(
 			`<p><a class="btn" href="https://svelte.dev/">Svelte</a> rocks</p>`,
@@ -19,4 +18,4 @@ export const load = () => {
 			},
 		),
 	};
-};
+}

@@ -4,8 +4,8 @@ import { expect as expectSSR, test as testSSR } from '@playwright/test';
 import Html from '../src/lib/Html.svelte';
 import type { parse } from '../src/lib/parse.js';
 import { NodeType } from '../src/lib/types.js';
-import { html, svg } from './data.js';
 import Test from './Test.svelte';
+import { html, svg } from './data.js';
 
 const getHtml = async (page: Page) => (await page.locator('#root')).innerHTML();
 
@@ -113,7 +113,7 @@ test.describe('converts <textarea> correctly', () => {
 		testSSR.use({ javaScriptEnabled: false });
 
 		testSSR('', async ({ page }) => {
-			await page.goto('http://127.0.0.1:5173/tests?test=textarea');
+			await page.goto('http://localhost:5173/tests?test=textarea');
 
 			expectSSR(
 				await (await page.locator('#with-html-nodes')).innerHTML(),
@@ -136,6 +136,54 @@ test.describe('converts <textarea> correctly', () => {
 	});
 });
 
+test.describe('does not parse <textarea> value as html', () => {
+	test.describe('with javascript', () => {
+		test('with html nodes', async ({ mount, page }) => {
+			const component = await mount(Html, { props: { html: html.textareaWithInvalidHtml } });
+			expect(await getHtml(page)).toBe(
+				'<textarea>&lt;p&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/p&gt;</textarea>',
+			);
+			expect(await component.inputValue()).toBe('<p><p>foo</p></p>');
+		});
+
+		test('without html nodes', async ({ mount, page }) => {
+			const component = await mount(Html, {
+				props: { html: html.textareaWithInvalidHtml, noHtmlNodes: true },
+			});
+			expect(await getHtml(page)).toBe(
+				'<textarea>&lt;p&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/p&gt;</textarea>',
+			);
+			expect(await component.inputValue()).toBe('<p><p>foo</p></p>');
+		});
+	});
+
+	testSSR.describe('without javascript', () => {
+		testSSR.use({ javaScriptEnabled: false });
+
+		testSSR('', async ({ page }) => {
+			await page.goto('http://localhost:5173/tests?test=textareaWithInvalidHtml');
+
+			expectSSR(
+				await (await page.locator('#with-html-nodes')).innerHTML(),
+			).toBe(
+				'<!-- HTML_TAG_START --><textarea>&lt;p&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/p&gt;</textarea><!-- HTML_TAG_END -->',
+			);
+			expectSSR(
+				await (await page.locator('#with-html-nodes textarea')).inputValue(),
+			).toBe('<p><p>foo</p></p>');
+
+			expectSSR(
+				await (await page.locator('#without-html-nodes')).innerHTML(),
+			).toBe(
+				'<textarea>&lt;p&gt;&lt;p&gt;foo&lt;/p&gt;&lt;/p&gt;</textarea>',
+			);
+			expectSSR(
+				await (await page.locator('#without-html-nodes textarea')).inputValue(),
+			).toBe('<p><p>foo</p></p>');
+		});
+	});
+});
+
 test.describe('does not escape <script> content', () => {
 	test('with html nodes', async ({ mount, page }) => {
 		await mount(Html, { props: { html: html.script } });
@@ -153,7 +201,7 @@ test.describe('does not escape <script> content', () => {
 		testSSR.use({ javaScriptEnabled: false });
 
 		testSSR('', async ({ page }) => {
-			await page.goto('http://127.0.0.1:5173/tests?test=script');
+			await page.goto('http://localhost:5173/tests?test=script');
 
 			expectSSR(
 				await (await page.locator('#with-html-nodes')).innerHTML(),
@@ -187,7 +235,7 @@ test.describe('does not escape <style> content', () => {
 		testSSR.use({ javaScriptEnabled: false });
 
 		testSSR('', async ({ page }) => {
-			await page.goto('http://127.0.0.1:5173/tests?test=style');
+			await page.goto('http://localhost:5173/tests?test=style');
 
 			expectSSR(
 				await (await page.locator('#with-html-nodes')).innerHTML(),
@@ -221,7 +269,7 @@ test.describe('renders void elements correctly', () => {
 		testSSR.use({ javaScriptEnabled: false });
 
 		testSSR('', async ({ page }) => {
-			await page.goto('http://127.0.0.1:5173/tests?test=void');
+			await page.goto('http://localhost:5173/tests?test=void');
 
 			expectSSR(
 				await (await page.locator('#with-html-nodes')).innerHTML(),
@@ -255,7 +303,7 @@ test.describe('skips doctype and comments', () => {
 		testSSR.use({ javaScriptEnabled: false });
 
 		testSSR('', async ({ page }) => {
-			await page.goto('http://127.0.0.1:5173/tests?test=doctypeAndComment');
+			await page.goto('http://localhost:5173/tests?test=doctypeAndComment');
 
 			expectSSR(
 				await (await page.locator('#with-html-nodes')).innerHTML(),
@@ -290,7 +338,7 @@ test.describe('converts SVG element with viewBox attribute', () => {
 		testSSR.use({ javaScriptEnabled: false });
 
 		testSSR('', async ({ page }) => {
-			await page.goto('http://127.0.0.1:5173/tests?test=simple');
+			await page.goto('http://localhost:5173/tests?test=simple');
 
 			expectSSR(
 				await (await page.locator('#with-html-nodes')).innerHTML(),
@@ -324,7 +372,7 @@ test.describe('converts custom element with attributes', () => {
 		testSSR.use({ javaScriptEnabled: false });
 
 		testSSR('', async ({ page }) => {
-			await page.goto('http://127.0.0.1:5173/tests?test=customElement');
+			await page.goto('http://localhost:5173/tests?test=customElement');
 
 			expectSSR(
 				await (await page.locator('#with-html-nodes')).innerHTML(),

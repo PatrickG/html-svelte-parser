@@ -1,11 +1,10 @@
-import { parse } from '$lib';
+import { parse } from '$lib/index.js';
 import { error } from '@sveltejs/kit';
-import { html, svg } from '../../../tests/data';
-import type { PageServerLoad } from './$types';
+import { html, svg } from '../../../tests/data.js';
 
 export const prerender = false;
 
-export const load: PageServerLoad = async ({ url }) => {
+export function load({ url }) {
 	const key = url.searchParams.get('test');
 	if (!key) {
 		throw error(404);
@@ -15,8 +14,8 @@ export const load: PageServerLoad = async ({ url }) => {
 		key in html
 			? html[key as keyof typeof html]
 			: key in svg
-			? svg[key as keyof typeof svg]
-			: null;
+				? svg[key as keyof typeof svg]
+				: null;
 	if (!test) {
 		throw error(404);
 	}
@@ -26,4 +25,4 @@ export const load: PageServerLoad = async ({ url }) => {
 		withHtmlNodes: parse(test),
 		withoutHtmlNodes: parse(test, { noHtmlNodes: true }),
 	};
-};
+}

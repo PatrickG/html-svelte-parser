@@ -1,5 +1,5 @@
-<script>
-	import { Html, isTag } from '$lib';
+<script lang="ts">
+	import { Html, isTag } from '$lib/index.js';
 	import Paragraph from './Paragraph.svelte';
 </script>
 

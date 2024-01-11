@@ -1,7 +1,6 @@
-export { isTag, isText } from 'domhandler';
-export { Element, Text } from 'domhandler';
+export { Element, Text, isTag, isText, type AnyNode, type ChildNode, type ParentNode } from 'domhandler';
 export { default as Html } from './Html.svelte';
-export * from './load';
-export * from './parse';
 export { default as Renderer } from './Renderer.svelte';
-export * from './types';
+export * from './load.js';
+export * from './parse.js';
+export * from './types.js';

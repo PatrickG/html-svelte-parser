@@ -2,9 +2,9 @@
 
 <script lang="ts">
 	import type { ComponentType } from 'svelte';
-	import { parse } from './parse';
 	import Renderer from './Renderer.svelte';
-	import type { Options, Props } from './types';
+	import { parse } from './parse.js';
+	import type { Options, Props } from './types.js';
 
 	interface $$Props extends Options {
 		/** The html string to parse */

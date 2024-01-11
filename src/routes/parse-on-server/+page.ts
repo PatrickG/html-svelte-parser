@@ -1,10 +1,15 @@
-import { loadComponents } from '$lib';
-import type { PageLoad } from './$types';
+import { loadComponents } from '$lib/index.js';
 
-export const load: PageLoad = async ({ data }) => ({
-	...data,
-	myHtml: loadComponents(
-		data.myHtml,
-		component => import(`../components/${component}.svelte`),
-	),
-});
+export async function load({ data }) {
+	return {
+		...data,
+		myHtml: await loadComponents(
+			data.myHtml,
+			component => import(`../components/${component}.svelte`),
+		),
+		textareaTest: {
+			...data.textareaTest,
+			components: {},
+		},
+	};
+}

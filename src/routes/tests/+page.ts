@@ -1,11 +1,17 @@
-import { loadComponents } from '$lib';
-import type { PageLoad } from './$types';
+import { loadComponents } from '$lib/index.js';
 
 const loader = (component: string) =>
 	import(`./components/${component}.svelte`);
 
-export const load: PageLoad = async ({ data }) => ({
-	...data,
-	withHtmlNodes: loadComponents(data.withHtmlNodes, loader),
-	withoutHtmlNodes: loadComponents(data.withoutHtmlNodes, loader),
-});
+export async function load({ data }) {
+	const [withHtmlNodes, withoutHtmlNodes] = await Promise.all([
+		loadComponents(data.withHtmlNodes, loader),
+		loadComponents(data.withoutHtmlNodes, loader),
+	]);
+
+	return {
+		...data,
+		withHtmlNodes,
+		withoutHtmlNodes,
+	};
+}

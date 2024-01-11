@@ -1,7 +1,6 @@
-<script>
-	import { Renderer } from '$lib';
+<script lang="ts">
+	import { Renderer } from '$lib/index.js';
 
-	/** @type {import('./$types').PageData} */
 	export let data;
 </script>
 
