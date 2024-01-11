@@ -19,7 +19,7 @@
 			</div>
 
 			<div class="card--actions">
-				<a class="btn" href="#whatever">Call to action</a>
+				<a class="btn" href="/readme">Call to action</a>
 			</div>
 		</div>
 	`;
